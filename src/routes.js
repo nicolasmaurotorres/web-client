@@ -3,8 +3,8 @@ import { Route, BrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import Greetings from './components/Greetings'
-import SignupPage from './components/SignupPage';
-import SigninPage from './components/SigninPage';
+import SignupPage from './components/signup/SignupPage';
+import SigninPage from './components/signin/SigninPage';
 
 class Routes extends React.Component {
     render() {
