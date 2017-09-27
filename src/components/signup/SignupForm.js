@@ -2,6 +2,7 @@ import React from 'react';
 import { FormGroup, ControlLabel, FormControl, Button } from 'react-bootstrap'
 import timezones from '../../data/timezones'
 import map from 'lodash/map';
+import PropTypes from 'prop-types';
 
 class SignupForm extends React.Component {
     constructor(props) {
@@ -11,15 +12,16 @@ class SignupForm extends React.Component {
         this._onSubmit = this._onSubmit.bind(this);
 
         this.state = {
-            username: "",
+            username: '',
             email: '',
             password: '',
             passwordConfirmation: '',
-            timezone: '',
-            options: map(timezones,(key,val) => {
-                return <option key={key} value={key}> {val} </option> ;
-            })
+            timezone: ''
         }
+
+        this.options = map(timezones,(key,val) => {
+            return <option key={key} value={key}> {val} </option> ;
+        })
     }
 
     _getValidationStateUsername() {
@@ -37,58 +39,62 @@ class SignupForm extends React.Component {
 
     _onSubmit(event) {
         event.preventDefault();
-        console.log(this.state);
+        this.props.userSignupRequest(this.state);
     }
 
     render() {
         return (
-            <form onSubmit={this._onSubmit }>
+            <form onSubmit={ this._onSubmit }>
                 <h1>Join our Market!</h1>
-                <FormGroup controlId="formUserName" validationState={this._getValidationStateUsername()}>
+                <FormGroup controlId="formUserName" validationState={ this._getValidationStateUsername() }>
                     <ControlLabel> Username </ControlLabel>
                     <FormControl type="text"
                         value={this.state.username}
                         placeholder="Enter Username"
                         name="username"
-                        onChange={this._handleChange} />
+                        onChange={ this._handleChange } />
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel> Email </ControlLabel>
                     <FormControl type="text"
                         name="email"
-                        value={this.props.email}
-                        onChange={this._handleChange} />
+                        value={ this.props.email }
+                        onChange={ this._handleChange } />
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel> Password </ControlLabel>
                     <FormControl type="password"
-                        onChange={this._handleChange}
+                        onChange={ this._handleChange }
                         name="password"
-                        value={this.state.password} />
+                        value={ this.state.password } />
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel> Password Confirmation </ControlLabel>
                     <FormControl type="passwordConfirmation"
-                        onChange={this._handleChange}
+                        onChange={ this._handleChange }
                         name="passwordConfirmation"
-                        value={this.state.passwordConfirmation} />
+                        value={ this.state.passwordConfirmation } />
                 </FormGroup>
                 <FormGroup controlId="formControlsSelect">
                     <ControlLabel> Timezone </ControlLabel>
                     <FormControl componentClass="select" 
                                  placeholder="Choose your timezone" 
                                  name="timezone"
-                                 value = {this.state.timezone}
+                                 value = { this.state.timezone }
                                  onChange={ this._handleChange }>
-                       {this.state.options}
+                       { this.options }
                     </FormControl>
                 </FormGroup>
                 <FormGroup>
-                    <Button>Sign Up </Button>
+                    <Button type='submit' bsStyle='success' >Sign Up </Button>
                 </FormGroup>
             </form>
         );
     }
+}
+
+SignupForm.propTypes = {
+   userSignupRequest: PropTypes.func.isRequired 
 }
 
 export default SignupForm;
