@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import validateInput from '../../validations/signupform.js';
 import TextFieldGroup from './TextFieldGroup';
 
+
 class SignupForm extends React.Component {
     constructor(props) {
         super(props);
@@ -32,11 +33,11 @@ class SignupForm extends React.Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
-    isValid(){
-        const {errors, isValid} = validateInput(this.state);
+    isValid() {
+        const { errors, isValid } = validateInput(this.state);
 
-        if (!isValid){
-            this.setState({errors});
+        if (!isValid) {
+            this.setState({ errors });
         }
 
         return isValid;
@@ -45,11 +46,16 @@ class SignupForm extends React.Component {
 
     _onSubmit(event) {
         event.preventDefault();
-        if(this.isValid()){
-            this.setState({ errors: {}, isLoading:true });
+        if (this.isValid()) {
+            this.setState({ errors: {}, isLoading: true });
             this.props.userSignupRequest(this.state)
-                .then(response => { this.setState({isLoading:false}) })
-                .catch(errors => { this.setState({ errors: errors.response.data , isLoading : false}); });
+                .then(response => {
+                    this.setState({ isLoading: false });
+                    this.props.history.push('/');
+                })
+                .catch(errors => {
+                    this.setState({ errors: errors.response.data, isLoading: false });
+                });
         }
     }
 
@@ -58,46 +64,46 @@ class SignupForm extends React.Component {
         return (
             <form onSubmit={this._onSubmit}>
                 <h1>Join our Market!</h1>
-                <TextFieldGroup 
+                <TextFieldGroup
                     controlId="usernameTextFieldGroup"
                     label="Username"
-                    name="username"
+                    field="username"
                     onChange={this._handleChange}
                     value={this.state.username}
                     error={errors.username}
-                    placeholder="Username"/>
-                
-                <TextFieldGroup 
+                    placeholder="Username" />
+
+                <TextFieldGroup
                     controlId="emailTextFieldGroup"
                     label="Email"
-                    name="email"
+                    field="email"
                     onChange={this._handleChange}
                     value={this.props.email}
-                    error={errors.username}
-                    placeholder="someemail@gmail.com"/>
-                
-                <TextFieldGroup 
+                    error={errors.email}
+                    placeholder="someemail@gmail.com" />
+
+                <TextFieldGroup
                     controlId="passwordTextFieldGroup"
                     label="Password"
-                    name="password"
+                    field="password"
                     type="password"
                     onChange={this._handleChange}
                     value={this.props.password}
                     error={errors.password}
-                    placeholder="********"/>
+                    placeholder="********" />
 
-                <TextFieldGroup 
+                <TextFieldGroup
                     controlId="passwordConfirmationTextFieldGroup"
                     label="Repeat password"
-                    name="passwordConfirmation"
+                    field="passwordConfirmation"
                     type="password"
                     onChange={this._handleChange}
                     value={this.props.passwordConfirmation}
                     error={errors.passwordConfirmation}
-                    placeholder="********"/>
+                    placeholder="********" />
 
                 <FormGroup controlId="formSignupTimezoneSelect"
-                           validationState={ (errors.timezone)? 'error': null}>
+                    validationState={(errors.timezone) ? 'error' : null}>
                     <ControlLabel> Timezone </ControlLabel>
                     <FormControl componentClass="select"
                         placeholder="Choose your timezone"
@@ -109,9 +115,9 @@ class SignupForm extends React.Component {
                     {errors.timezone && <HelpBlock> {errors.timezone} </HelpBlock>}
                 </FormGroup>
                 <FormGroup>
-                    <Button disabled={this.state.isLoading} 
-                            type='submit' 
-                            bsStyle='primary' >Sign Up </Button>
+                    <Button disabled={this.state.isLoading}
+                        type='submit'
+                        bsStyle='primary' >Sign Up </Button>
                 </FormGroup>
             </form>
         );
@@ -119,7 +125,8 @@ class SignupForm extends React.Component {
 }
 
 SignupForm.propTypes = {
-    userSignupRequest: PropTypes.func.isRequired
+    userSignupRequest: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired
 }
 
 export default SignupForm;
