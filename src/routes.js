@@ -11,11 +11,11 @@ class Routes extends React.Component {
         return (
             <BrowserRouter>
                 <div> {/*required only 1 child as DIV*/}
-                    <Route path="/" component={App} />
-                    <Route path="/" exact component={Greetings} />
+                    <Route path="/" component={ App } />
+                    <Route path="/" exact component={ Greetings } />
 
-                    <Route path="/signup" exact component={SignupPage} />
-                    <Route path="/signin" exact component={SigninPage} />
+                    <Route path="/signup" exact component={ SignupPage } />
+                    <Route path="/signin" exact component={ SigninPage } />
                 </div>
             </BrowserRouter>
         );

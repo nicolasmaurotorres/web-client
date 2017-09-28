@@ -6,7 +6,6 @@ import PropTypes from 'prop-types';
 import validateInput from '../../validations/signupform.js';
 import TextFieldGroup from './TextFieldGroup';
 
-
 class SignupForm extends React.Component {
     constructor(props) {
         super(props);
@@ -51,7 +50,11 @@ class SignupForm extends React.Component {
             this.props.userSignupRequest(this.state)
                 .then(response => {
                     this.setState({ isLoading: false });
-                    this.props.history.push('/');
+                    this.props.addFlashMessage({
+                        type:'success',
+                        text:'you have signed up sucefully, Welcome!'
+                    });
+                    this.props.history.push('/'); //redireccionar hacia /
                 })
                 .catch(errors => {
                     this.setState({ errors: errors.response.data, isLoading: false });
@@ -126,7 +129,8 @@ class SignupForm extends React.Component {
 
 SignupForm.propTypes = {
     userSignupRequest: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    addFlashMessage:PropTypes.func.isRequired
 }
 
 export default SignupForm;
