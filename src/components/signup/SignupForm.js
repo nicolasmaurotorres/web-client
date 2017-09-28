@@ -3,6 +3,8 @@ import { FormGroup, ControlLabel, FormControl, Button, HelpBlock } from 'react-b
 import timezones from '../../data/timezones'
 import map from 'lodash/map';
 import PropTypes from 'prop-types';
+import validateInput from '../../validations/signupform.js';
+import TextFieldGroup from './TextFieldGroup';
 
 class SignupForm extends React.Component {
     constructor(props) {
@@ -30,12 +32,25 @@ class SignupForm extends React.Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
+    isValid(){
+        const {errors, isValid} = validateInput(this.state);
+
+        if (!isValid){
+            this.setState({errors});
+        }
+
+        return isValid;
+    }
+
+
     _onSubmit(event) {
         event.preventDefault();
-        this.setState({ errors: {}, isLoading:true });
-        this.props.userSignupRequest(this.state)
-            .then(response => { this.setState({isLoading:false}) })
-            .catch(errors => { this.setState({ errors: errors.response.data , isLoading : false}); });
+        if(this.isValid()){
+            this.setState({ errors: {}, isLoading:true });
+            this.props.userSignupRequest(this.state)
+                .then(response => { this.setState({isLoading:false}) })
+                .catch(errors => { this.setState({ errors: errors.response.data , isLoading : false}); });
+        }
     }
 
     render() {
@@ -43,43 +58,44 @@ class SignupForm extends React.Component {
         return (
             <form onSubmit={this._onSubmit}>
                 <h1>Join our Market!</h1>
-                <FormGroup controlId="formSignupUsername"
-                    validationState={(errors.username) ? 'error' : null}>
-                    <ControlLabel> Username </ControlLabel>
-                    <FormControl type="text"
-                        value={this.state.username}
-                        placeholder="Enter Username"
-                        name="username"
-                        onChange={this._handleChange} />
-                    {errors.username && <HelpBlock> {errors.username} </HelpBlock>}
-                </FormGroup>
-                <FormGroup controlId="formSignupEmail"
-                    validationState={(errors.email) ? 'error' : null}>
-                    <ControlLabel> Email </ControlLabel>
-                    <FormControl type="text"
-                        name="email"
-                        value={this.props.email}
-                        onChange={this._handleChange} />
-                    {errors.email && <HelpBlock> {errors.email} </HelpBlock>}
-                </FormGroup>
-                <FormGroup controlId="formSignupPassword"
-                    validationState={(errors.password) ? 'error' : null}>
-                    <ControlLabel> Password </ControlLabel>
-                    <FormControl type="password"
-                        onChange={this._handleChange}
-                        name="password"
-                        value={this.state.password} />
-                    {errors.password && <HelpBlock> {errors.password} </HelpBlock>}
-                </FormGroup>
-                <FormGroup controlId="formSignupPasswordConfirmation"
-                     validationState={ (errors.password)? 'error': null}>
-                    <ControlLabel> Password Confirmation </ControlLabel>
-                    <FormControl type="password"
-                        onChange={this._handleChange}
-                        name="passwordConfirmation"
-                        value={this.state.passwordConfirmation} />
-                    {errors.passwordConfirmation && <HelpBlock> {errors.passwordConfirmation} </HelpBlock>}
-                </FormGroup>
+                <TextFieldGroup 
+                    controlId="usernameTextFieldGroup"
+                    label="Username"
+                    name="username"
+                    onChange={this._handleChange}
+                    value={this.state.username}
+                    error={errors.username}
+                    placeholder="Username"/>
+                
+                <TextFieldGroup 
+                    controlId="emailTextFieldGroup"
+                    label="Email"
+                    name="email"
+                    onChange={this._handleChange}
+                    value={this.props.email}
+                    error={errors.username}
+                    placeholder="someemail@gmail.com"/>
+                
+                <TextFieldGroup 
+                    controlId="passwordTextFieldGroup"
+                    label="Password"
+                    name="password"
+                    type="password"
+                    onChange={this._handleChange}
+                    value={this.props.password}
+                    error={errors.password}
+                    placeholder="********"/>
+
+                <TextFieldGroup 
+                    controlId="passwordConfirmationTextFieldGroup"
+                    label="Repeat password"
+                    name="passwordConfirmation"
+                    type="password"
+                    onChange={this._handleChange}
+                    value={this.props.passwordConfirmation}
+                    error={errors.passwordConfirmation}
+                    placeholder="********"/>
+
                 <FormGroup controlId="formSignupTimezoneSelect"
                            validationState={ (errors.timezone)? 'error': null}>
                     <ControlLabel> Timezone </ControlLabel>
