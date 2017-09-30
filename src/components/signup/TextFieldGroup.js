@@ -10,6 +10,7 @@ class TextFieldGroup extends React.Component {
                 <ControlLabel> {this.props.label} </ControlLabel>
                 <FormControl type={this.props.type}
                              value={this.props.value}
+                             onBlur={this.props.checkUserExists}
                              placeholder={this.props.placeholder}
                              name={this.props.field}
                              onChange={this.props.onChange} 
@@ -27,7 +28,8 @@ TextFieldGroup.PropTypes = {
     type:PropTypes.string.isRequired,
     placeholder:PropTypes.string.isRequired,
     field: PropTypes.string.isRequired,
-    onChange:PropTypes.func.isRequired
+    onChange:PropTypes.func.isRequired,
+    checkUserExists:PropTypes.func
 }
 
 TextFieldGroup.defaultProps ={

@@ -11,6 +11,7 @@ class SignupForm extends React.Component {
         super(props);
         this._handleChange = this._handleChange.bind(this);
         this._onSubmit = this._onSubmit.bind(this);
+        this._checkUserExists = this._checkUserExists.bind(this);
 
         this.state = {
             username: '',
@@ -19,7 +20,8 @@ class SignupForm extends React.Component {
             passwordConfirmation: '',
             timezone: '',
             errors: {},
-            isLoading: false
+            isLoading: false,
+            invalid: false
         }
 
         this.options = map(timezones, (key, val) => {
@@ -43,6 +45,26 @@ class SignupForm extends React.Component {
     }
 
 
+    _checkUserExists(e) {
+        const field = e.target.name;
+        const val = e.target.value;
+        if (val !== '') {
+            this.props.isUserExists(val).then(res => {
+                let errors = this.state.errors;
+                let invalid;
+                if (res.data.errors) {
+                    invalid = true;
+                    errors[field] = res.data.errors.repeated + ' ' + field + ' registrado';
+                } else {
+                    errors[field] = '';
+                    invalid = false;
+                }
+                this.setState({ errors, invalid });
+            });
+        }
+    }
+
+
     _onSubmit(event) {
         event.preventDefault();
         if (this.isValid()) {
@@ -51,8 +73,8 @@ class SignupForm extends React.Component {
                 .then(response => {
                     this.setState({ isLoading: false });
                     this.props.addFlashMessage({
-                        type:'success',
-                        text:'you have signed up sucefully, Welcome!'
+                        type: 'success',
+                        text: 'you have signed up sucefully, Welcome!'
                     });
                     this.props.history.push('/'); //redireccionar hacia /
                 })
@@ -71,6 +93,7 @@ class SignupForm extends React.Component {
                     controlId="usernameTextFieldGroup"
                     label="Username"
                     field="username"
+                    checkUserExists={this._checkUserExists}
                     onChange={this._handleChange}
                     value={this.state.username}
                     error={errors.username}
@@ -80,6 +103,7 @@ class SignupForm extends React.Component {
                     controlId="emailTextFieldGroup"
                     label="Email"
                     field="email"
+                    checkUserExists={this._checkUserExists}
                     onChange={this._handleChange}
                     value={this.props.email}
                     error={errors.email}
@@ -118,7 +142,7 @@ class SignupForm extends React.Component {
                     {errors.timezone && <HelpBlock> {errors.timezone} </HelpBlock>}
                 </FormGroup>
                 <FormGroup>
-                    <Button disabled={this.state.isLoading}
+                    <Button disabled={this.state.isLoading || this.state.invalid}
                         type='submit'
                         bsStyle='primary' >Sign Up </Button>
                 </FormGroup>
@@ -130,7 +154,8 @@ class SignupForm extends React.Component {
 SignupForm.propTypes = {
     userSignupRequest: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
-    addFlashMessage:PropTypes.func.isRequired
+    addFlashMessage: PropTypes.func.isRequired,
+    isUserExists: PropTypes.func.isRequired
 }
 
 export default SignupForm;
