@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, FormGroup, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { signin } from '../../actions/signinActions';
+import { signin } from '../../actions/authActions';
 
 
 import  validateInput  from '../../validations/signinform';
