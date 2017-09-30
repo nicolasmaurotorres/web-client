@@ -12,12 +12,10 @@ class FlashMessage extends React.Component {
         this.props.deleteFlashMessage(this.props.message.id);
     }
 
-
     render() {
-        const { id, type, text } = this.props.message;
-        debugger;
+        const {  type, text } = this.props.message;
         return (
-            <Alert bsStyle = {(type === 'success')? 'success' : 'error'}
+            <Alert bsStyle = {(type === 'success')? 'success' : 'danger'}
             onDismiss={this._handleAlertDismiss} > {text} </Alert>
         );
     }
