@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, FormGroup } from 'react-bootstrap';
+import { Button, FormGroup, Alert } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { signin } from '../../actions/signinActions';
 
@@ -40,7 +40,9 @@ class SigninForm extends React.Component {
             this.setState({errors : {}, isLoading: true});
             this.props.signin(this.state)
             .then(res => this.props.history.push('/'))
-            .catch(err => console.log(err)); /*this.setState({errors: err.data.errors, isLoading:false})*/
+            .catch(err => {
+                this.setState({errors:err.response.data.errors,isLoading:false});
+            }); /*this.setState({errors: err.data.errors, isLoading:false})*/
         }
     }
 
@@ -53,6 +55,7 @@ class SigninForm extends React.Component {
         return (
             <form onSubmit={this._onSubmit}>
                 <h1> Sign in </h1>
+                { errors.form &&  <Alert bsStyle = 'danger' onDismiss= {this._handleAlertDismiss} > {errors.form } </Alert> }
                 <TextFieldGroup
                     field="identifier"
                     label="Username / Email"
