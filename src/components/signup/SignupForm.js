@@ -1,10 +1,11 @@
 import React from 'react';
 import { FormGroup, ControlLabel, FormControl, Button, HelpBlock } from 'react-bootstrap'
+
 import timezones from '../../data/timezones'
 import map from 'lodash/map';
 import PropTypes from 'prop-types';
 import validateInput from '../../validations/signupform.js';
-import TextFieldGroup from './TextFieldGroup';
+import TextFieldGroup from '../../common/TextFieldGroup';
 
 class SignupForm extends React.Component {
     constructor(props) {

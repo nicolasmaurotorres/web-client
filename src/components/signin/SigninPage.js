@@ -1,9 +1,14 @@
 import React from 'react';
+import SigninForm from './signinForm';
 
 class SigninPage extends React.Component{
     render(){
         return(
-            <h1>Sign in Page </h1>
+            <div className="row">
+                <div className="col-md-4 col-md-offset-4">
+                    <SigninForm history={ this.props.history } />
+                </div>    
+            </div>
         );
     }
 }
