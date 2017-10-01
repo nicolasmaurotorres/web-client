@@ -39,10 +39,10 @@ class SigninForm extends React.Component {
         if (this._isValid()){
             this.setState({errors : {}, isLoading: true});
             this.props.signin(this.state)
-            .then(res => this.props.history.push('/'))
-            .catch(err => {
-                this.setState({errors:err.response.data.errors,isLoading:false});
-            }); /*this.setState({errors: err.data.errors, isLoading:false})*/
+            .then(res => { 
+                this.props.history.push('/')
+            })
+            .catch(err => this.setState({errors:err.response.data.errors, isLoading:false})); 
         }
     }
 
@@ -55,19 +55,19 @@ class SigninForm extends React.Component {
         return (
             <form onSubmit={this._onSubmit}>
                 <h1> Sign in </h1>
-                { errors.form &&  <Alert bsStyle = 'danger' onDismiss= {this._handleAlertDismiss} > {errors.form } </Alert> }
+                { (errors && errors.form) ? <Alert bsStyle = 'danger' onDismiss= {this._handleAlertDismiss} > {errors.form } </Alert> : '' }
                 <TextFieldGroup
                     field="identifier"
                     label="Username / Email"
                     value={identifier}
-                    error={errors.identifier}
+                    error = { (errors && errors.identifier) ? errors.identifier : null } 
                     onChange={this._onChange} />
 
                 <TextFieldGroup
                     field="password"
                     label="Password"
                     value={password}
-                    error={errors.password}
+                    error={ (errors && errors.password) ? errors.password : null } 
                     onChange={this._onChange}
                     type="password" />
                 <FormGroup>

@@ -24,6 +24,9 @@ class NavigationBar extends React.Component {
         const { isAuthenticated } = this.props.auth;
         const userLinks = (
             <Nav pullRight>
+                 <LinkContainer to='new-event'>
+                    <NavItem eventKey={1}> New Event </NavItem>
+                </LinkContainer>
                 <LinkContainer to='#' onClick={ this._logout }>
                     <NavItem eventKey={1}>Logout </NavItem>
                 </LinkContainer>

@@ -5,6 +5,7 @@ import App from './App';
 import Greetings from './components/Greetings'
 import SignupPage from './components/signup/signupPage';
 import SigninPage from './components/signin/signinPage';
+import NewEventPage from './components/events/NewEventPage';
 
 class Routes extends React.Component {
     render() {
@@ -16,6 +17,7 @@ class Routes extends React.Component {
 
                     <Route path="/signup" exact component={ SignupPage } />
                     <Route path="/signin" exact component={ SigninPage } />
+                    <Route path="/new-event" exact component={ NewEventPage } />
                 </div>
             </BrowserRouter>
         );
