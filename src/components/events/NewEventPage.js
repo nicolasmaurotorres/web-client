@@ -5,7 +5,7 @@ class NewEventPage extends React.Component {
     render() {
         return (
             <div> {/*required only 1 child as DIV*/}
-               <EventForm />
+               <EventForm history={ this.props.history }/>
             </div>
         );
     }
