@@ -12,7 +12,7 @@ export function setCurrentUser(user){
 
 export function signin(data){
     return dispatch => {
-        return axios.post('http://localhost:3000/api/auth',data)
+        return axios.post('/api/auth',data)
         .then(res => {
             const token = res.data.token;
             localStorage.setItem('jwtToken',token);
